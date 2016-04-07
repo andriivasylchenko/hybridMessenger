@@ -1,0 +1,33 @@
+import 'es6-shim';
+import {App, Platform} from 'ionic-angular';
+import {StatusBar} from 'ionic-native';
+import {TabsPage} from './pages/tabs/tabs';
+import {Renderer} from 'angular2/core';
+import {EmployeeService} from './providers/employee-service/employee-service';
+
+
+@App({
+  template: '<ion-nav [root]="rootPage"></ion-nav>',
+  providers: [EmployeeService],
+  config: {} // http://ionicframework.com/docs/v2/api/config/Config/
+})
+export class MyApp {
+  rootPage: any;
+
+  constructor(platform: Platform, renderer:Renderer) {
+    platform.ready().then(() => {
+      // Okay, so the platform is ready and our plugins are available.
+      // Here you can do any higher level native things you might need.
+      StatusBar.styleDefault();
+    });
+    
+    renderer.listenGlobal('document', 'wlInitFinished', () => {
+        console.log('---> wlInitFinished event received');
+        this.MFPInit();
+    })
+  }
+  
+  MFPInit() {
+      this.rootPage = TabsPage;
+  }
+}
